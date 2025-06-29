@@ -1,15 +1,15 @@
 package config
 
 const (
-	HostHttp       = "localhost:6000"
-	HostGin        = "localhost:6001"
-	HostFiber      = "localhost:6002"
-	HostGoFr       = "localhost:6003"
-	HostBeego      = "localhost:6004"
-	HostEcho       = "localhost:6005"
-	HostChi        = "localhost:6006"
-	HostMux        = "localhost:6007"
-	HostFastHttp   = "localhost:6008"
-	HostHttpRouter = "localhost:6009"
-	HostGoji       = "localhost:6010"
+	HostHttp       = "0.0.0.0:6000"
+	HostGin        = "0.0.0.0:6001"
+	HostFiber      = "0.0.0.0:6002"
+	HostGoFr       = "0.0.0.0:6003"
+	HostBeego      = "0.0.0.0:6004"
+	HostEcho       = "0.0.0.0:6005"
+	HostChi        = "0.0.0.0:6006"
+	HostMux        = "0.0.0.0:6007"
+	HostFastHttp   = "0.0.0.0:6008"
+	HostHttpRouter = "0.0.0.0:6009"
+	HostGoji       = "0.0.0.0:6010"
 )
