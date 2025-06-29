@@ -5,11 +5,11 @@ Benchmarking most populars HTTP servers written in Go.
 * [Http](https://pkg.go.dev/net/http)
 * [Gin](https://github.com/gin-gonic/gin)
 * [Fiber](https://github.com/gofiber/fiber)
-* [Echo](https://github.com/labstack/echo)
 * [GoFr](https://github.com/gofiber/fiber)
+* [Beego](https://github.com/astaxie/beego)
+* [Echo](https://github.com/labstack/echo)
 
 ## On the way
-* [Beego](https://github.com/astaxie/beego)
 * [Chi](https://github.com/go-chi/chi)
 * [Gorilla Mux](https://github.com/gorilla/mux)
 * [Fasthttp](https://github.com/valyala/fasthttp)
