@@ -1,8 +1,9 @@
 #!/bin/bash
 
+
 # Error handling configuration
 # set -euo pipefail
-trap 'error_handler $LINENO' EXIT
+trap 'error_handler' EXIT
 
 IS_ERROR=false
 
@@ -30,7 +31,9 @@ DURATION=10
 TIMEOUT=10
 WORKERS=4
 METHOD="GET"
-URL=""
+TARGET_URL=""
+TARGET_NAME="Local"
+PROFILE="default"
 TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S)
 OUTPUT_DIR="results"
 OUTPUT_FILE="${OUTPUT_DIR}/summary_${TIMESTAMP}.txt"
@@ -39,7 +42,7 @@ OUTPUT_FILE="${OUTPUT_DIR}/summary_${TIMESTAMP}.txt"
 function error_handler() {
     if [ "$IS_ERROR" = true ]; then
         echo -e "\n${RED}Error occurred on line ${NC}" 
-        exit 1
+        exit 0
     fi
 }
 
@@ -87,7 +90,7 @@ function write_file() {
 function validate_number() {
     [[ "$1" =~ ^[0-9]+$ ]] || {
         error_exit "$2 must be a positive integer"
-        return 1
+        return 0
     }
 }
 
@@ -95,12 +98,12 @@ function validate_url() {
     local url=$1
     
     if [[ -z "$url" ]]; then
-        error_exit "URL parameter (-u) is required\nExample: -u http://example.com"
+        error_exit "TARGET_URL parameter (-u) is required\nExample: -u http://example.com"
         return 1
     fi
 
     if ! [[ "$url" =~ ^https?://[^/]+ ]]; then
-        error_exit "Invalid URL format: $url\nMust include protocol (http:// or https://) and host"
+        error_exit "Invalid TARGET_URL format: $url\nMust include protocol (http:// or https://) and host"
         return 1
     fi
 
@@ -108,7 +111,7 @@ function validate_url() {
     host=$(awk -F "[/:]" '{print $4}' <<< "$url")
     
     if [[ -z "$host" ]]; then
-        error_exit "No host specified in URL: $url"
+        error_exit "No host specified in TARGET_URL: $url"
         return 1
     fi
 }
@@ -126,11 +129,11 @@ function validate_inputs() {
         return 1
     fi
 
-    if [[ -z "$URL" ]]; then
-        error_exit "Missing required parameter: -u URL\nExample: -u http://example.com"
+    if [[ -z "$TARGET_URL" ]]; then
+        error_exit "Missing required parameter: -u TARGET_URL\nExample: -u http://example.com"
         return 1
     fi
-    validate_url "$URL" || return 1
+    validate_url "$TARGET_URL" || return 1
 }
 
 function check_go_installation() {
@@ -178,7 +181,7 @@ function check_tool() {
             read confirm"?Do you want to install $tool? (y/n) "
             echo 
             if [[ $confirm =~ ^[Yy]$ ]]; then
-                $install_func || return 1
+                $install_func || error_exit "Failed install ${tool}!"; return 1
             else
                 echo -e "${YELLOW}Skipping $tool benchmarks${NC}" 
                 return 1
@@ -188,20 +191,21 @@ function check_tool() {
             return 1
         fi
     fi
-    return 0
 }
 
 function create_summary_header() {
     echo -e "+------------+"
     echo -e "| ${BOLD}${BLUE}Parameters${NC} |"
     echo -e "+$(right_pad "" 69 "-")+"
-    echo -e "| Target URL     : ${BLUE}$(right_pad $URL 50)${NC} |"
+    echo -e "| Target NAME    : ${BLUE}$(right_pad $TARGET_NAME 50)${NC} |"
+    echo -e "| Target URL     : ${BLUE}$(right_pad $TARGET_URL 50)${NC} |"
     echo -e "| HTTP Method    : ${BLUE}$(right_pad $METHOD 50)${NC} |"
     echo -e "| Connections    : ${BLUE}$(right_pad $CONNECTIONS 50)${NC} |"
     echo -e "| Requests       : ${BLUE}$(right_pad $REQUESTS 50)${NC} |"
     echo -e "| Duration       : ${BLUE}$(right_pad $DURATION 50)${NC} |"
     echo -e "| Results Dir    : ${BLUE}$(right_pad $OUTPUT_DIR 50)${NC} |"
     echo -e "| Timestamp      : ${BLUE}$(right_pad $TIMESTAMP 50)${NC} |"
+    echo -e "| Profile        : ${BLUE}$(right_pad $PROFILE 50)${NC} |"
     echo -e "+$(right_pad "" 69 "-")+"
 }
 
@@ -211,7 +215,7 @@ function run() {
     create_summary_header
 
     # Run benchmarks
-    run_benchmarks
+    run_benchmarks || error_exit "failed benchmarking..."; return 1
 
     # Show results
     echo "+-----------------+"
@@ -240,8 +244,7 @@ function run_benchmarks() {
         
         if check_tool "$tool" "$install_func" $auto_install; then
             if ! "$benchmark_func" ; then
-                echo -e "${YELLOW}Benchmark with $tool failed${NC}"
-                IS_ERROR=true
+                error_exit "${YELLOW}Benchmark with $tool failed${NC}"
             fi
             tool_available=true
             echo -e '\n'
@@ -262,7 +265,7 @@ function run_bombardier() {
     echo -e "| Requests    : ${BLUE}$(right_pad $REQUESTS 20)${NC} |"
     echo -e "+$(right_pad "" 36 "-")+"
 
-    bombardier -c "$CONNECTIONS" -n "$REQUESTS" -m "$METHOD" -t "${TIMEOUT}s" -l "$URL"
+    bombardier -c "$CONNECTIONS" -n "$REQUESTS" -m "$METHOD" -t "${TIMEOUT}s" -l "$TARGET_URL"
 }
 
 function run_go_wrk() {
@@ -272,7 +275,7 @@ function run_go_wrk() {
     echo -e "| Duration    : ${BLUE}$(right_pad $DURATION 20)${NC} |" 
     echo -e "+$(right_pad "" 36 "-")+" 
 
-    go-wrk -c "$CONNECTIONS" -d "$DURATION" -T "$((TIMEOUT * 1000))" -M "$METHOD" "$URL" 
+    go-wrk -c "$CONNECTIONS" -d "$DURATION" -T "$((TIMEOUT * 1000))" -M "$METHOD" "$TARGET_URL" 
 }
 
 function run_vegeta() {
@@ -283,7 +286,7 @@ function run_vegeta() {
     echo -e "| Duration    : ${BLUE}$(right_pad $DURATION 20)${NC} |" 
     echo -e "+$(right_pad "" 36 "-")+" 
 
-    echo "$METHOD $URL" | vegeta attack -connections "$CONNECTIONS" -duration "${DURATION}s" -workers "$WORKERS" -timeout "${TIMEOUT}s" | vegeta report
+    echo "$METHOD $TARGET_URL" | vegeta attack -connections "$CONNECTIONS" -duration "${DURATION}s" -workers "$WORKERS" -rate 0 --max-workers 1500 -timeout "${TIMEOUT}s" | vegeta report
 }
 
 function usage() {
@@ -300,6 +303,8 @@ function usage() {
     echo -e "  -t | --timeout          Timeout in seconds (default: 10)"
     echo -e "  -o | --output-file      Output file (default: {output-dir}/{timestamp})" 
     echo -e "       --output-dir       Output directory (default: ./results)"
+    echo -e "  -p | --profile          Test profiles (default: "default")"
+    echo -e "  -n | --name             Target name (default: "Local")"
     echo -e "  -h | --help             Show help" 
     echo -e "" 
     echo -e "Examples:" 
@@ -318,14 +323,16 @@ function parse_args() {
             -t| --timeout) TIMEOUT="$2"; shift ;;
             -o| --output-file) OUTPUT_FILE="$2"; shift ;;
                 --output-dir) OUTPUT_DIR="$2"; shift ;;
-            -h|--help) usage; exit 1 ;;
-            \?) error_exit "Invalid option -$OPTARG"; echo "\n"; usage; exit 0 ;;
+            -n| --name) TARGET_NAME="$2"; shift ;;
+            -p| --profile) PROFILE="$2"; shift ;;
+            -h| --help) usage; return 1 ;;
+            \?) error_exit "Invalid option -$OPTARG"; echo "\n"; usage; return 1;;
             *) 
-                if [[ -z "$URL" ]]; then
-                    URL="$1"
+                if [[ -z "$TARGET_URL" ]]; then
+                    TARGET_URL="$1"
                 else
                     error_exit "Unknown argument: $1"
-                    exit 0
+                    return 1
                 fi
                 ;;
         esac
@@ -334,7 +341,7 @@ function parse_args() {
 }
 
 function main() {
-    parse_args "$@" || exit 0
+    parse_args "$@" || return 1
 
     # Validate inputs
     if ! validate_inputs; then
@@ -350,8 +357,6 @@ function main() {
     }
 
     run | write_file
-    
-    return 1
 }
 
 # --- Execution ---
