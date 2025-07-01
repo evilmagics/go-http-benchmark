@@ -32,27 +32,27 @@ function run() {
     echo -e "\n${GREEN}Running tests for ${TARGET_NAME}...${NC}\n"
 
     echo -e "Running tests ${BLUE}Hello World - Basic${NC}\n"
-    source ./scripts/benchmark.sh -c 100 -r 10000 -d 30 -t 3 -n "$TARGET_NAME" -p "Hello World (Basic)" -m "GET" -o "results/raws/summary_${TARGET_NAME}_hello_world_basic.txt" "${TARGET_BASE}/hello-world"
+    source ./scripts/benchmark.sh -c 100 -r 10000 -d 30 -t 3 -w 200 -n "$TARGET_NAME" -p "Hello World (Basic)" -m "GET" -o "results/raws/summary_${TARGET_NAME}_hello_world_basic.txt" "${TARGET_BASE}/hello-world"
     echo -e "\n"
 
     echo -e "Running tests ${BLUE}Hello World - High Traffic${NC}\n"
-    source ./scripts/benchmark.sh -c 1000 -r 100000 -d 30 -t  3 -n "$TARGET_NAME" -p "Hello World (High Traffic)" -m GET -o "results/raws/summary_${TARGET_NAME}_hello_world_high_traffic.txt" "${TARGET_BASE}/hello-world"
+    source ./scripts/benchmark.sh -c 1000 -r 100000 -d 30 -t 3 -w 200 -n "$TARGET_NAME" -p "Hello World (High Traffic)" -m GET -o "results/raws/summary_${TARGET_NAME}_hello_world_high_traffic.txt" "${TARGET_BASE}/hello-world"
     echo -e "\n"
 
     echo -e "Running tests ${BLUE}Structured Responses - Basic${NC}\n"
-    source ./scripts/benchmark.sh -c 100 -r 10000 -d 30 -t  3 -n "$TARGET_NAME" -p "Structured Responses (Basic)" -m GET -o "results/raws/summary_${TARGET_NAME}_structured_responses_basic.txt" "${TARGET_BASE}/structured-messages"
+    source ./scripts/benchmark.sh -c 100 -r 10000 -d 30 -t 3 -w 200 -n "$TARGET_NAME" -p "Structured Responses (Basic)" -m GET -o "results/raws/summary_${TARGET_NAME}_structured_responses_basic.txt" "${TARGET_BASE}/structured-messages"
     echo -e "\n"
     
     echo -e "Running tests ${BLUE}Structured Responses - High Traffic${NC}\n"
-    source ./scripts/benchmark.sh -c 1000 -r 100000 -d 30 -t  3 -n "$TARGET_NAME" -p "Structured Responses (High Traffic)" -m GET -o "results/raws/summary_${TARGET_NAME}_structured_responses_high_traffic.txt" "${TARGET_BASE}/structured-messages"
+    source ./scripts/benchmark.sh -c 1000 -r 100000 -d 30 -t 3 -w 200 -n "$TARGET_NAME" -p "Structured Responses (High Traffic)" -m GET -o "results/raws/summary_${TARGET_NAME}_structured_responses_high_traffic.txt" "${TARGET_BASE}/structured-messages"
     echo -e "\n"
 
     echo -e "Running tests ${BLUE}Large Process - Basic${NC}\n"
-    source ./scripts/benchmark.sh -c 100 -r 10000 -d 30 -t 15  -n "$TARGET_NAME" -p "Large Process (Basic)" -m POST -o "results/raws/summary_${TARGET_NAME}_large_process_basic.txt" "${TARGET_BASE}/large-process"
+    source ./scripts/benchmark.sh -c 100 -r 10000 -d 30 -t 15 -w 200 -n "$TARGET_NAME" -p "Large Process (Basic)" -m POST -o "results/raws/summary_${TARGET_NAME}_large_process_basic.txt" "${TARGET_BASE}/large-process"
     echo -e "\n"
     
     echo -e "Running tests ${BLUE}Large Process - High Traffic${NC}\n"
-    source ./scripts/benchmark.sh -c 1000 -r 100000 -d 30 -t 15  -n "$TARGET_NAME" -p "Large Process (High Traffic)" -m POST -o "results/raws/summary_${TARGET_NAME}_large_process_high_traffic.txt" "${TARGET_BASE}/large-process"
+    source ./scripts/benchmark.sh -c 1000 -r 100000 -d 30 -t 15 -w 200 -n "$TARGET_NAME" -p "Large Process (High Traffic)" -m POST -o "results/raws/summary_${TARGET_NAME}_large_process_high_traffic.txt" "${TARGET_BASE}/large-process"
     echo -e "\n"
 }
 

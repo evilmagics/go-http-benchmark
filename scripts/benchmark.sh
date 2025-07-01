@@ -286,7 +286,7 @@ function run_vegeta() {
     echo -e "| Duration    : ${BLUE}$(right_pad $DURATION 20)${NC} |" 
     echo -e "+$(right_pad "" 36 "-")+" 
 
-    echo "$METHOD $TARGET_URL" | vegeta attack -connections "$CONNECTIONS" -duration "${DURATION}s" -workers "$WORKERS" -rate 0 --max-workers 1500 -timeout "${TIMEOUT}s" | vegeta report
+    echo "$METHOD $TARGET_URL" | vegeta attack -connections "$CONNECTIONS" -duration "${DURATION}s" -workers "$WORKERS" -rate 0 -max-workers 500 -timeout "${TIMEOUT}s" | vegeta report
 }
 
 function usage() {

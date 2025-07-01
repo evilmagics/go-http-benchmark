@@ -1,5 +1,5 @@
 # Go HTTP Benchmark
-Benchmarking most populars HTTP servers written in Go.
+Benchmarking most populars HTTP servers written in Go. 
 
 # Targets
 * [Http](https://pkg.go.dev/net/http)
@@ -29,7 +29,7 @@ Benchmarking most populars HTTP servers written in Go.
 * Vegeta v12.12.0 [🔗](https://github.com/tsenart/vegeta/)
 
 ## Scripts
-Currently, I'm using `bombardier`, `wrk`, and `hey` to benchmark HTTP servers. All of them are available in the [scripts](./scripts) directory. Assume server have small traffic and high traffic benchmark. 
+Currently, I'm using `bombardier`, `wrk`, and `Vegeta` to benchmark HTTP servers. All of them are available in the [scripts](./scripts) directory. Assume server have small traffic and high traffic benchmark. 
 
 Handle under **10k requests** on **100 connections** as small traffic benchmark. Handle under **100k requests** on **1000 connections** as high traffic benchmark.
 
@@ -66,6 +66,45 @@ This script will generate a summary file that contains the following information
     # High concurrency benchmark
     benchmark.sh -c 1000 -r 100000 -d 30 -t 15 -m POST -o "results/summary_${TARGET_NAME}_large_process_high_traffic.txt" "${TARGET_BASE}/large-process"
 ```
+
+# Configurations
+## Address
+```go
+HostHttp       = "0.0.0.0:6000"
+HostGin        = "0.0.0.0:6001"
+HostFiber      = "0.0.0.0:6002"
+HostGoFr       = "0.0.0.0:6003"
+HostBeego      = "0.0.0.0:6004"
+HostEcho       = "0.0.0.0:6005"
+HostChi        = "0.0.0.0:6006"
+HostMux        = "0.0.0.0:6007"
+HostFastHttp   = "0.0.0.0:6008"
+HostHttpRouter = "0.0.0.0:6009"
+HostGoji       = "0.0.0.0:6010"
+```
+
+## Scripts
+Easy to run all servers with the following command:
+```go
+// [Http]
+source ./scripts/run.sh -n "net-http" -b "http://127.0.0.1:6000"
+
+// [Gin]
+source ./scripts/run.sh -n "gin" -b "http://127.0.0.1:6001"
+
+// [Fiber]
+source ./scripts/run.sh -n "fiber" -b "http://127.0.0.1:6002"
+
+// [GoFr]
+source ./scripts/run.sh -n "gofr" -b "http://127.0.0.1:6003"
+
+// [Beego]
+source ./scripts/run.sh -n "beego" -b "http://127.0.0.1:6004"
+
+// [Echo]
+source ./scripts/run.sh -n "echo" -b "http://127.0.0.1:6005"
+```
+
 
 # Results
 ***Coming soon...***
