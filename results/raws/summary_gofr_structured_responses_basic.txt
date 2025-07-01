@@ -1,0 +1,80 @@
++------------+
+| Parameters |
++---------------------------------------------------------------------+
+| Target NAME    : gofr                                               |
+| Target URL     : http://127.0.0.1:6003/structured-messages          |
+| HTTP Method    : GET                                                |
+| Connections    : 100                                                |
+| Requests       : 10000                                              |
+| Duration       : 30                                                 |
+| Results Dir    : results                                            |
+| Timestamp      : 2025-06-30_21-44-19                                |
+| Profile        : Structured Responses (Basic)                       |
++---------------------------------------------------------------------+
+
++-----------------+
+| Bombardier      |
++------------------------------------+
+| Requests    : 10000                |
++------------------------------------+
+Bombarding http://127.0.0.1:6003/structured-messages with 10000 request(s) using 100 connection(s)
+ 0 / 10000    0.00% 1105 / 10000   11.05% 5499/s 00m01s 2540 / 10000   25.40% 6334/s 00m01s 3915 / 10000   39.15% 6509/s 5223 / 10000   52.23% 6512/s 6663 / 10000   66.63% 6647/s 8078 / 10000   80.78% 6716/s 9540 / 10000   95.40% 6799/s 10000 / 10000  100.00% 6235/s 10000 / 10000  100.00% 6235/s 1s
+Done!
+Statistics        Avg      Stdev        Max
+  Reqs/sec      6862.94     943.13    8798.72
+  Latency       14.52ms     1.61ms    29.66ms
+  Latency Distribution
+     50%    14.03ms
+     75%    15.24ms
+     90%    16.82ms
+     95%    18.32ms
+     99%    24.01ms
+  HTTP codes:
+    1xx - 0, 2xx - 10000, 3xx - 0, 4xx - 0, 5xx - 0
+    others - 0
+  Throughput:     3.38MB/s
+
+
++-----------------+
+| Go-Wrk          |
++------------------------------------+
+| Duration    : 30                   |
++------------------------------------+
+Running 30s test @ http://127.0.0.1:6003/structured-messages
+  100 goroutine(s) running concurrently
+215259 requests in 29.994897997s, 86.22MB read
+Requests/sec:		7176.52
+Transfer/sec:		2.87MB
+Overall Requests/sec:	7169.05
+Overall Transfer/sec:	2.87MB
+Fastest Request:	2.454ms
+Avg Req Time:		13.933ms
+Slowest Request:	34.315ms
+Number of Errors:	0
+10%:			12.092ms
+50%:			12.239ms
+75%:			12.263ms
+99%:			12.282ms
+99.9%:			12.283ms
+99.9999%:		12.283ms
+99.99999%:		12.283ms
+stddev:			1.316ms
+
+
++-----------------+
+| Vegeta          |
++------------------------------------+
+| Requests    : 10000                |
+| Duration    : 30                   |
++------------------------------------+
+Requests      [total, rate, throughput]         209817, 6993.93, 6903.24
+Duration      [total, attack, wait]             30.076s, 30s, 76.122ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  1.226ms, 71.434ms, 71.42ms, 76.474ms, 78.341ms, 82.73ms, 281.633ms
+Bytes In      [total, mean]                     15779272, 75.20
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           98.95%
+Status Codes  [code:count]                      0:2195  200:207622  
+Error Set:
+Get "http://127.0.0.1:6003/structured-messages": dial tcp 0.0.0.0:0->127.0.0.1:6003: connectex: No connection could be made because the target machine actively refused it.
+
+

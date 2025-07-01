@@ -1,0 +1,83 @@
++------------+
+| Parameters |
++---------------------------------------------------------------------+
+| Target NAME    : gofr                                               |
+| Target URL     : http://127.0.0.1:6003/hello-world                  |
+| HTTP Method    : GET                                                |
+| Connections    : 1000                                               |
+| Requests       : 100000                                             |
+| Duration       : 30                                                 |
+| Results Dir    : results                                            |
+| Timestamp      : 2025-06-30_21-43-12                                |
+| Profile        : Hello World (High Traffic)                         |
++---------------------------------------------------------------------+
+
++-----------------+
+| Bombardier      |
++------------------------------------+
+| Requests    : 100000               |
++------------------------------------+
+Bombarding http://127.0.0.1:6003/hello-world with 100000 request(s) using 1000 connection(s)
+ 0 / 100000    0.00% 3203 / 100000    3.20% 13392/s 00m07s 7068 / 100000    7.07% 16077/s 00m05s 11166 / 100000   11.17% 17452/s 00m05s 15892 / 100000   15.89% 18914/s 00m04s 20623 / 100000   20.62% 19822/s 00m04s 25346 / 100000   25.35% 20433/s 00m03s 30169 / 100000   30.17% 20934/s 00m03s 34997 / 100000   35.00% 21311/s 00m03s 39877 / 100000   39.88% 21645/s 00m02s 44762 / 100000   44.76% 21916/s 00m02s 49685 / 100000   49.69% 22148/s 00m02s 54578 / 100000   54.58% 22333/s 00m02s 59443 / 100000   59.44% 22481/s 00m01s 64406 / 100000   64.41% 22644/s 00m01s 69261 / 100000   69.26% 22741/s 00m01s 73945 / 100000   73.94% 22780/s 00m01s 78549 / 100000   78.55% 22793/s 82526 / 100000   82.53% 22633/s 86462 / 100000   86.46% 22478/s 90330 / 100000   90.33% 22320/s 95280 / 100000   95.28% 22434/s 99986 / 100000   99.99% 22480/s 100000 / 100000  100.00% 21514/s 100000 / 100000  100.00% 21513/s 4s
+Done!
+Statistics        Avg      Stdev        Max
+  Reqs/sec     22639.78    3721.56   48576.29
+  Latency       43.63ms   118.97ms      3.13s
+  Latency Distribution
+     50%    35.57ms
+     75%    38.15ms
+     90%    48.51ms
+     95%    50.53ms
+     99%    54.55ms
+  HTTP codes:
+    1xx - 0, 2xx - 22502, 3xx - 0, 4xx - 0, 5xx - 0
+    others - 77498
+  Errors:
+    dial tcp 127.0.0.1:6003: connectex: No connection could be made because the target machine actively refused it. - 77498
+  Throughput:     2.22MB/s
+
+
++-----------------+
+| Go-Wrk          |
++------------------------------------+
+| Duration    : 30                   |
++------------------------------------+
+Running 30s test @ http://127.0.0.1:6003/hello-world
+  1000 goroutine(s) running concurrently
+142428 requests in 8.778918696s, 50.12MB read
+Requests/sec:		16223.87
+Transfer/sec:		5.71MB
+Overall Requests/sec:	4667.78
+Overall Transfer/sec:	1.64MB
+Fastest Request:	30.542ms
+Avg Req Time:		61.637ms
+Slowest Request:	3.010943s
+Number of Errors:	458823
+Error Counts:		No connection could be made because the target machine actively refused it.=458082,net/http: timeout awaiting response headers=741
+10%:			34.371ms
+50%:			39.961ms
+75%:			41.389ms
+99%:			42.093ms
+99.9%:			42.163ms
+99.9999%:		42.163ms
+99.99999%:		42.163ms
+stddev:			70.236ms
+
+
++-----------------+
+| Vegeta          |
++------------------------------------+
+| Requests    : 100000               |
+| Duration    : 30                   |
++------------------------------------+
+Requests      [total, rate, throughput]         211622, 7054.37, 6755.23
+Duration      [total, attack, wait]             30.061s, 29.999s, 62.702ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  1.102ms, 70.809ms, 70.856ms, 76.289ms, 78.162ms, 92.379ms, 1.415s
+Bytes In      [total, mean]                     5076800, 23.99
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           95.96%
+Status Codes  [code:count]                      0:8550  200:203072  
+Error Set:
+Get "http://127.0.0.1:6003/hello-world": dial tcp 0.0.0.0:0->127.0.0.1:6003: connectex: No connection could be made because the target machine actively refused it.
+
+

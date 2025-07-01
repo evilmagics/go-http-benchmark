@@ -1,0 +1,83 @@
++------------+
+| Parameters |
++---------------------------------------------------------------------+
+| Target NAME    : gin                                                |
+| Target URL     : http://127.0.0.1:6001/large-process                |
+| HTTP Method    : POST                                               |
+| Connections    : 1000                                               |
+| Requests       : 100000                                             |
+| Duration       : 30                                                 |
+| Results Dir    : results                                            |
+| Timestamp      : 2025-06-30_21-19-15                                |
+| Profile        : Large Process (High Traffic)                       |
++---------------------------------------------------------------------+
+
++-----------------+
+| Bombardier      |
++------------------------------------+
+| Requests    : 100000               |
++------------------------------------+
+Bombarding http://127.0.0.1:6001/large-process with 100000 request(s) using 1000 connection(s)
+ 0 / 100000    0.00% 2025 / 100000    2.02% 9841/s 00m09s 6030 / 100000    6.03% 14849/s 00m06s 10077 / 100000   10.08% 16616/s 00m05s 14080 / 100000   14.08% 17457/s 00m04s 18348 / 100000   18.35% 18220/s 00m04s 22441 / 100000   22.44% 18589/s 00m04s 26687 / 100000   26.69% 18959/s 00m03s 30098 / 100000   30.10% 18718/s 00m03s 34120 / 100000   34.12% 18871/s 00m03s 37940 / 100000   37.94% 18890/s 00m03s 41638 / 100000   41.64% 18851/s 00m03s 45731 / 100000   45.73% 18982/s 00m02s 49774 / 100000   49.77% 19075/s 00m02s 52681 / 100000   52.68% 18750/s 00m02s 56098 / 100000   56.10% 18636/s 00m02s 59612 / 100000   59.61% 18568/s 00m02s 63205 / 100000   63.20% 18531/s 00m01s 67439 / 100000   67.44% 18675/s 00m01s 71553 / 100000   71.55% 18774/s 00m01s 74769 / 100000   74.77% 18637/s 00m01s 78758 / 100000   78.76% 18699/s 00m01s 82437 / 100000   82.44% 18683/s 86501 / 100000   86.50% 18753/s 90358 / 100000   90.36% 18775/s 94166 / 100000   94.17% 18783/s 97732 / 100000   97.73% 18745/s 99601 / 100000   99.60% 18396/s 99631 / 100000   99.63% 17742/s 99659 / 100000   99.66% 17135/s 99688 / 100000   99.69% 16568/s 99793 / 100000   99.79% 16052/s 100000 / 100000  100.00% 15583/s 100000 / 100000  100.00% 15583/s 6s
+Done!
+Statistics        Avg      Stdev        Max
+  Reqs/sec     16001.82    7346.60   24208.14
+  Latency       55.47ms   229.54ms      6.25s
+  Latency Distribution
+     50%    34.11ms
+     75%    37.27ms
+     90%    41.63ms
+     95%    45.58ms
+     99%      1.00s
+  HTTP codes:
+    1xx - 0, 2xx - 1094, 3xx - 0, 4xx - 0, 5xx - 0
+    others - 98906
+  Errors:
+    dial tcp 127.0.0.1:6001: connectex: No connection could be made because the target machine actively refused it. - 98906
+  Throughput:    58.48KB/s
+
+
++-----------------+
+| Go-Wrk          |
++------------------------------------+
+| Duration    : 30                   |
++------------------------------------+
+Running 30s test @ http://127.0.0.1:6001/large-process
+  1000 goroutine(s) running concurrently
+24760 requests in 26.566547878s, 4.58MB read
+Requests/sec:		932.00
+Transfer/sec:		176.57KB
+Overall Requests/sec:	791.06
+Overall Transfer/sec:	149.87KB
+Fastest Request:	1s
+Avg Req Time:		1.072962s
+Slowest Request:	6.108927s
+Number of Errors:	180663
+Error Counts:		No connection could be made because the target machine actively refused it.=180663
+10%:			1.000031s
+50%:			1.000031s
+75%:			1.000031s
+99%:			1.000031s
+99.9%:			1.000031s
+99.9999%:		1.000031s
+99.99999%:		1.000031s
+stddev:			479.945ms
+
+
++-----------------+
+| Vegeta          |
++------------------------------------+
+| Requests    : 100000               |
+| Duration    : 30                   |
++------------------------------------+
+Requests      [total, rate, throughput]         17706, 589.36, 483.22
+Duration      [total, attack, wait]             31.044s, 30.043s, 1.001s
+Latencies     [min, mean, 50, 90, 95, 99, max]  405.9µs, 850.697ms, 1.001s, 1.003s, 1.004s, 1.098s, 1.162s
+Bytes In      [total, mean]                     1320088, 74.56
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           84.72%
+Status Codes  [code:count]                      0:2705  200:15001  
+Error Set:
+Post "http://127.0.0.1:6001/large-process": dial tcp 0.0.0.0:0->127.0.0.1:6001: connectex: No connection could be made because the target machine actively refused it.
+
+

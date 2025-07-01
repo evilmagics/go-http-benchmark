@@ -1,0 +1,80 @@
++------------+
+| Parameters |
++---------------------------------------------------------------------+
+| Target NAME    : gofr                                               |
+| Target URL     : http://127.0.0.1:6003/hello-world                  |
+| HTTP Method    : GET                                                |
+| Connections    : 100                                                |
+| Requests       : 10000                                              |
+| Duration       : 30                                                 |
+| Results Dir    : results                                            |
+| Timestamp      : 2025-06-30_21-42-10                                |
+| Profile        : Hello World (Basic)                                |
++---------------------------------------------------------------------+
+
++-----------------+
+| Bombardier      |
++------------------------------------+
+| Requests    : 10000                |
++------------------------------------+
+Bombarding http://127.0.0.1:6003/hello-world with 10000 request(s) using 100 connection(s)
+ 0 / 10000    0.00% 1209 / 10000   12.09% 6026/s 00m01s 2612 / 10000   26.12% 6519/s 00m01s 4066 / 10000   40.66% 6763/s 5625 / 10000   56.25% 7019/s 7115 / 10000   71.15% 7103/s 8238 / 10000   82.38% 6850/s 9531 / 10000   95.31% 6793/s 10000 / 10000  100.00% 6236/s 10000 / 10000  100.00% 6234/s 1s
+Done!
+Statistics        Avg      Stdev        Max
+  Reqs/sec      6841.85    1170.85    9325.65
+  Latency       14.62ms     1.76ms    31.44ms
+  Latency Distribution
+     50%    13.84ms
+     75%    15.43ms
+     90%    18.03ms
+     95%    19.68ms
+     99%    23.07ms
+  HTTP codes:
+    1xx - 0, 2xx - 10000, 3xx - 0, 4xx - 0, 5xx - 0
+    others - 0
+  Throughput:     2.97MB/s
+
+
++-----------------+
+| Go-Wrk          |
++------------------------------------+
+| Duration    : 30                   |
++------------------------------------+
+Running 30s test @ http://127.0.0.1:6003/hello-world
+  100 goroutine(s) running concurrently
+217202 requests in 29.996191154s, 76.43MB read
+Requests/sec:		7240.99
+Transfer/sec:		2.55MB
+Overall Requests/sec:	7232.15
+Overall Transfer/sec:	2.55MB
+Fastest Request:	2.541ms
+Avg Req Time:		13.809ms
+Slowest Request:	34.135ms
+Number of Errors:	0
+10%:			11.993ms
+50%:			12.223ms
+75%:			12.248ms
+99%:			12.266ms
+99.9%:			12.266ms
+99.9999%:		12.266ms
+99.99999%:		12.266ms
+stddev:			1.199ms
+
+
++-----------------+
+| Vegeta          |
++------------------------------------+
+| Requests    : 10000                |
+| Duration    : 30                   |
++------------------------------------+
+Requests      [total, rate, throughput]         210603, 7020.20, 6949.94
+Duration      [total, attack, wait]             30.067s, 30s, 67.154ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  548µs, 71.204ms, 71.103ms, 75.859ms, 77.388ms, 80.954ms, 237.523ms
+Bytes In      [total, mean]                     5224050, 24.81
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           99.22%
+Status Codes  [code:count]                      0:1641  200:208962  
+Error Set:
+Get "http://127.0.0.1:6003/hello-world": dial tcp 0.0.0.0:0->127.0.0.1:6003: connectex: No connection could be made because the target machine actively refused it.
+
+

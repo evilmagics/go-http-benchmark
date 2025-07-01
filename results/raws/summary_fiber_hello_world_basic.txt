@@ -1,0 +1,81 @@
++------------+
+| Parameters |
++---------------------------------------------------------------------+
+| Target NAME    : fiber                                              |
+| Target URL     : http://127.0.0.1:6002/hello-world                  |
+| HTTP Method    : GET                                                |
+| Connections    : 100                                                |
+| Requests       : 10000                                              |
+| Duration       : 30                                                 |
+| Results Dir    : results                                            |
+| Timestamp      : 2025-06-30_21-21-33                                |
+| Profile        : Hello World (Basic)                                |
++---------------------------------------------------------------------+
+
++-----------------+
+| Bombardier      |
++------------------------------------+
+| Requests    : 10000                |
++------------------------------------+
+Bombarding http://127.0.0.1:6002/hello-world with 10000 request(s) using 100 connection(s)
+ 0 / 10000    0.00% 10000 / 10000  100.00% 49784/s 10000 / 10000  100.00% 49670/s 0s
+Done!
+Statistics        Avg      Stdev        Max
+  Reqs/sec    103301.88   46303.50  135489.73
+  Latency        0.94ms     1.13ms    30.05ms
+  Latency Distribution
+     50%   830.00us
+     75%     1.06ms
+     90%     1.32ms
+     95%     1.68ms
+     99%     7.30ms
+  HTTP codes:
+    1xx - 0, 2xx - 10000, 3xx - 0, 4xx - 0, 5xx - 0
+    others - 0
+  Throughput:    19.09MB/s
+
+
++-----------------+
+| Go-Wrk          |
++------------------------------------+
+| Duration    : 30                   |
++------------------------------------+
+Running 30s test @ http://127.0.0.1:6002/hello-world
+  100 goroutine(s) running concurrently
+3652992 requests in 29.893541064s, 393.67MB read
+Requests/sec:		122200.04
+Transfer/sec:		13.17MB
+Overall Requests/sec:	121675.01
+Overall Transfer/sec:	13.11MB
+Fastest Request:	0s
+Avg Req Time:		817µs
+Slowest Request:	32.547ms
+Number of Errors:	0
+10%:			0s
+50%:			0s
+75%:			0s
+99%:			0s
+99.9%:			0s
+99.9999%:		0s
+99.99999%:		0s
+stddev:			490µs
+
+
++-----------------+
+| Vegeta          |
++------------------------------------+
+| Requests    : 10000                |
+| Duration    : 30                   |
++------------------------------------+
+Requests      [total, rate, throughput]         1138604, 37948.94, 37880.68
+Duration      [total, attack, wait]             30.02s, 30.004s, 16.762ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  511.4µs, 7.918ms, 997.049µs, 8.024ms, 16.033ms, 66.557ms, 3.182s
+Bytes In      [total, mean]                     14783483, 12.98
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           99.88%
+Status Codes  [code:count]                      0:1413  200:1137191  
+Error Set:
+Get "http://127.0.0.1:6002/hello-world": dial tcp 0.0.0.0:0->127.0.0.1:6002: connectex: No connection could be made because the target machine actively refused it.
+Get "http://127.0.0.1:6002/hello-world": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+
+

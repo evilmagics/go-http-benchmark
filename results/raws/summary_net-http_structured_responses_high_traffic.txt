@@ -1,0 +1,83 @@
++------------+
+| Parameters |
++---------------------------------------------------------------------+
+| Target NAME    : net-http                                           |
+| Target URL     : http://127.0.0.1:6000/structured-messages          |
+| HTTP Method    : GET                                                |
+| Connections    : 1000                                               |
+| Requests       : 100000                                             |
+| Duration       : 30                                                 |
+| Results Dir    : results                                            |
+| Timestamp      : 2025-06-30_21-04-11                                |
+| Profile        : Structured Responses (High Traffic)                |
++---------------------------------------------------------------------+
+
++-----------------+
+| Bombardier      |
++------------------------------------+
+| Requests    : 100000               |
++------------------------------------+
+Bombarding http://127.0.0.1:6000/structured-messages with 100000 request(s) using 1000 connection(s)
+ 0 / 100000    0.00% 8728 / 100000    8.73% 33913/s 00m02s 22460 / 100000   22.46% 49065/s 00m01s 38888 / 100000   38.89% 58997/s 00m01s 53784 / 100000   53.78% 62601/s 69842 / 100000   69.84% 65858/s 85743 / 100000   85.74% 68019/s 100000 / 100000  100.00% 68435/s 100000 / 100000  100.00% 68435/s 1s
+Done!
+Statistics        Avg      Stdev        Max
+  Reqs/sec     72284.05   15585.71   92502.36
+  Latency       13.51ms    57.67ms      1.44s
+  Latency Distribution
+     50%   531.00us
+     75%   641.00us
+     90%    59.53ms
+     95%    73.11ms
+     99%   217.97ms
+  HTTP codes:
+    1xx - 0, 2xx - 89427, 3xx - 0, 4xx - 0, 5xx - 0
+    others - 10573
+  Errors:
+    dial tcp 127.0.0.1:6000: connectex: No connection could be made because the target machine actively refused it. - 10573
+  Throughput:    14.96MB/s
+
+
++-----------------+
+| Go-Wrk          |
++------------------------------------+
+| Duration    : 30                   |
++------------------------------------+
+Running 30s test @ http://127.0.0.1:6000/structured-messages
+  1000 goroutine(s) running concurrently
+1954812 requests in 4.644321102s, 294.55MB read
+Requests/sec:		420903.71
+Transfer/sec:		63.42MB
+Overall Requests/sec:	64604.81
+Overall Transfer/sec:	9.73MB
+Fastest Request:	0s
+Avg Req Time:		2.375ms
+Slowest Request:	2.967167s
+Number of Errors:	86714
+Error Counts:		No connection could be made because the target machine actively refused it.=86451,net/http: timeout awaiting response headers=263
+10%:			0s
+50%:			0s
+75%:			0s
+99%:			0s
+99.9%:			0s
+99.9999%:		0s
+99.99999%:		0s
+stddev:			5.101ms
+
+
++-----------------+
+| Vegeta          |
++------------------------------------+
+| Requests    : 100000               |
+| Duration    : 30                   |
++------------------------------------+
+Requests      [total, rate, throughput]         1772267, 59076.93, 59070.34
+Duration      [total, attack, wait]             30.002s, 29.999s, 3.176ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  2.661ms, 5.379ms, 3.307ms, 13.233ms, 17.705ms, 28.358ms, 129.332ms
+Bytes In      [total, mean]                     118741219, 67.00
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      0:10  200:1772257  
+Error Set:
+Get "http://127.0.0.1:6000/structured-messages": dial tcp 0.0.0.0:0->127.0.0.1:6000: connectex: No connection could be made because the target machine actively refused it.
+
+

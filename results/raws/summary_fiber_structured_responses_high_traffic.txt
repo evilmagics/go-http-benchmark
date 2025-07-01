@@ -1,0 +1,82 @@
++------------+
+| Parameters |
++---------------------------------------------------------------------+
+| Target NAME    : fiber                                              |
+| Target URL     : http://127.0.0.1:6002/structured-messages          |
+| HTTP Method    : GET                                                |
+| Connections    : 1000                                               |
+| Requests       : 100000                                             |
+| Duration       : 30                                                 |
+| Results Dir    : results                                            |
+| Timestamp      : 2025-06-30_21-27-38                                |
+| Profile        : Structured Responses (High Traffic)                |
++---------------------------------------------------------------------+
+
++-----------------+
+| Bombardier      |
++------------------------------------+
+| Requests    : 100000               |
++------------------------------------+
+Bombarding http://127.0.0.1:6002/structured-messages with 100000 request(s) using 1000 connection(s)
+ 0 / 100000    0.00% 8659 / 100000    8.66% 40864/s 00m02s 33216 / 100000   33.22% 80427/s 58008 / 100000   58.01% 94438/s 85347 / 100000   85.35% 104138/s 100000 / 100000  100.00% 97988/s 100000 / 100000  100.00% 97988/s 1s
+Done!
+Statistics        Avg      Stdev        Max
+  Reqs/sec    116635.77   29798.62  144556.99
+  Latency        8.94ms    37.01ms      0.93s
+  Latency Distribution
+     50%   553.00us
+     75%     1.52ms
+     90%     2.60ms
+     95%    11.12ms
+     99%   266.03ms
+  HTTP codes:
+    1xx - 0, 2xx - 95923, 3xx - 0, 4xx - 0, 5xx - 0
+    others - 4077
+  Errors:
+    dial tcp 127.0.0.1:6002: connectex: No connection could be made because the target machine actively refused it. - 4077
+  Throughput:    24.67MB/s
+
+
++-----------------+
+| Go-Wrk          |
++------------------------------------+
+| Duration    : 30                   |
++------------------------------------+
+Running 30s test @ http://127.0.0.1:6002/structured-messages
+  1000 goroutine(s) running concurrently
+2462471 requests in 6.79982172s, 368.70MB read
+Requests/sec:		362137.58
+Transfer/sec:		54.22MB
+Overall Requests/sec:	81532.74
+Overall Transfer/sec:	12.21MB
+Fastest Request:	0s
+Avg Req Time:		2.761ms
+Slowest Request:	3.047679s
+Number of Errors:	64932
+Error Counts:		net/http: timeout awaiting response headers=275,No connection could be made because the target machine actively refused it.=64657
+10%:			0s
+50%:			0s
+75%:			0s
+99%:			0s
+99.9%:			0s
+99.9999%:		0s
+99.99999%:		0s
+stddev:			6.133ms
+
+
++-----------------+
+| Vegeta          |
++------------------------------------+
+| Requests    : 100000               |
+| Duration    : 30                   |
++------------------------------------+
+Requests      [total, rate, throughput]         1930488, 64350.20, 64348.59
+Duration      [total, attack, wait]             30s, 30s, 752.7µs
+Latencies     [min, mean, 50, 90, 95, 99, max]  515.6µs, 4.555ms, 3.059ms, 10.376ms, 14.276ms, 24.918ms, 90.284ms
+Bytes In      [total, mean]                     127412208, 66.00
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      200:1930488  
+Error Set:
+
+

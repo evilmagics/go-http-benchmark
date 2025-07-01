@@ -1,0 +1,81 @@
++------------+
+| Parameters |
++---------------------------------------------------------------------+
+| Target NAME    : fiber                                              |
+| Target URL     : http://127.0.0.1:6002/structured-messages          |
+| HTTP Method    : GET                                                |
+| Connections    : 100                                                |
+| Requests       : 10000                                              |
+| Duration       : 30                                                 |
+| Results Dir    : results                                            |
+| Timestamp      : 2025-06-30_21-23-37                                |
+| Profile        : Structured Responses (Basic)                       |
++---------------------------------------------------------------------+
+
++-----------------+
+| Bombardier      |
++------------------------------------+
+| Requests    : 10000                |
++------------------------------------+
+Bombarding http://127.0.0.1:6002/structured-messages with 10000 request(s) using 100 connection(s)
+ 0 / 10000    0.00% 10000 / 10000  100.00% 49723/s 10000 / 10000  100.00% 49723/s 0s
+Done!
+Statistics        Avg      Stdev        Max
+  Reqs/sec     97002.41   40105.32  125589.41
+  Latency        1.02ms     1.44ms    25.23ms
+  Latency Distribution
+     50%   775.00us
+     75%     1.07ms
+     90%     1.40ms
+     95%     1.96ms
+     99%     8.13ms
+  HTTP codes:
+    1xx - 0, 2xx - 10000, 3xx - 0, 4xx - 0, 5xx - 0
+    others - 0
+  Throughput:    21.51MB/s
+
+
++-----------------+
+| Go-Wrk          |
++------------------------------------+
+| Duration    : 30                   |
++------------------------------------+
+Running 30s test @ http://127.0.0.1:6002/structured-messages
+  100 goroutine(s) running concurrently
+2623991 requests in 29.909326529s, 392.88MB read
+Requests/sec:		87731.53
+Transfer/sec:		13.14MB
+Overall Requests/sec:	87316.42
+Overall Transfer/sec:	13.07MB
+Fastest Request:	0s
+Avg Req Time:		1.139ms
+Slowest Request:	72.155ms
+Number of Errors:	0
+10%:			0s
+50%:			0s
+75%:			0s
+99%:			0s
+99.9%:			0s
+99.9999%:		0s
+99.99999%:		0s
+stddev:			1.791ms
+
+
++-----------------+
+| Vegeta          |
++------------------------------------+
+| Requests    : 10000                |
+| Duration    : 30                   |
++------------------------------------+
+Requests      [total, rate, throughput]         262748, 30280.32, 30107.69
+Duration      [total, attack, wait]             8.695s, 8.677s, 17.867ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  588.8µs, 8.893ms, 1.63ms, 16.527ms, 27.428ms, 99.907ms, 3.108s
+Bytes In      [total, mean]                     17278008, 65.76
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           99.63%
+Status Codes  [code:count]                      0:960  200:261788  
+Error Set:
+Get "http://127.0.0.1:6002/structured-messages": dial tcp 0.0.0.0:0->127.0.0.1:6002: connectex: No connection could be made because the target machine actively refused it.
+Get "http://127.0.0.1:6002/structured-messages": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+
+

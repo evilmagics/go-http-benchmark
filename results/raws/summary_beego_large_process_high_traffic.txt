@@ -1,0 +1,83 @@
++------------+
+| Parameters |
++---------------------------------------------------------------------+
+| Target NAME    : beego                                              |
+| Target URL     : http://127.0.0.1:6004/large-process                |
+| HTTP Method    : POST                                               |
+| Connections    : 1000                                               |
+| Requests       : 100000                                             |
+| Duration       : 30                                                 |
+| Results Dir    : results                                            |
+| Timestamp      : 2025-06-30_23-22-11                                |
+| Profile        : Large Process (High Traffic)                       |
++---------------------------------------------------------------------+
+
++-----------------+
+| Bombardier      |
++------------------------------------+
+| Requests    : 100000               |
++------------------------------------+
+Bombarding http://127.0.0.1:6004/large-process with 100000 request(s) using 1000 connection(s)
+ 0 / 100000    0.00% 3496 / 100000    3.50% 16890/s 00m05s 13582 / 100000   13.58% 33342/s 00m02s 24603 / 100000   24.60% 40414/s 00m01s 35093 / 100000   35.09% 43376/s 00m01s 46456 / 100000   46.46% 46026/s 00m01s 59592 / 100000   59.59% 49258/s 72985 / 100000   72.98% 51754/s 87272 / 100000   87.27% 54176/s 100000 / 100000  100.00% 55201/s 100000 / 100000  100.00% 55201/s 1s
+Done!
+Statistics        Avg      Stdev        Max
+  Reqs/sec     55559.55   19894.46   84444.05
+  Latency       17.44ms    54.40ms      1.79s
+  Latency Distribution
+     50%     1.68ms
+     75%    37.23ms
+     90%    42.10ms
+     95%    44.29ms
+     99%    66.96ms
+  HTTP codes:
+    1xx - 0, 2xx - 69030, 3xx - 0, 4xx - 0, 5xx - 0
+    others - 30970
+  Errors:
+    dial tcp 127.0.0.1:6004: connectex: No connection could be made because the target machine actively refused it. - 30970
+  Throughput:    11.78MB/s
+
+
++-----------------+
+| Go-Wrk          |
++------------------------------------+
+| Duration    : 30                   |
++------------------------------------+
+Running 30s test @ http://127.0.0.1:6004/large-process
+  1000 goroutine(s) running concurrently
+464948 requests in 17.725185639s, 76.27MB read
+Requests/sec:		26230.92
+Transfer/sec:		4.30MB
+Overall Requests/sec:	13037.08
+Overall Transfer/sec:	2.14MB
+Fastest Request:	0s
+Avg Req Time:		38.122ms
+Slowest Request:	15.131135s
+Number of Errors:	113400
+Error Counts:		net/http: timeout awaiting response headers=162,No connection could be made because the target machine actively refused it.=113238
+10%:			0s
+50%:			0s
+75%:			0s
+99%:			0s
+99.9%:			0s
+99.9999%:		0s
+99.99999%:		0s
+stddev:			551.209ms
+
+
++-----------------+
+| Vegeta          |
++------------------------------------+
+| Requests    : 100000               |
+| Duration    : 30                   |
++------------------------------------+
+Requests      [total, rate, throughput]         468394, 15596.76, 15577.37
+Duration      [total, attack, wait]             30.063s, 30.032s, 31.077ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  1.028ms, 25.211ms, 8.057ms, 60.561ms, 120.002ms, 284.682ms, 1.086s
+Bytes In      [total, mean]                     30907536, 65.99
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           99.98%
+Status Codes  [code:count]                      0:98  200:468296  
+Error Set:
+Post "http://127.0.0.1:6004/large-process": dial tcp 0.0.0.0:0->127.0.0.1:6004: connectex: No connection could be made because the target machine actively refused it.
+
+

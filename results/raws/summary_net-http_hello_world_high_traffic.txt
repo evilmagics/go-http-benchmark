@@ -1,0 +1,83 @@
++------------+
+| Parameters |
++---------------------------------------------------------------------+
+| Target NAME    : net-http                                           |
+| Target URL     : http://127.0.0.1:6000/hello-world                  |
+| HTTP Method    : GET                                                |
+| Connections    : 1000                                               |
+| Requests       : 100000                                             |
+| Duration       : 30                                                 |
+| Results Dir    : results                                            |
+| Timestamp      : 2025-06-30_21-02-06                                |
+| Profile        : Hello World (High Traffic)                         |
++---------------------------------------------------------------------+
+
++-----------------+
+| Bombardier      |
++------------------------------------+
+| Requests    : 100000               |
++------------------------------------+
+Bombarding http://127.0.0.1:6000/hello-world with 100000 request(s) using 1000 connection(s)
+ 675 / 100000    0.68% 18496/s 00m05s 4683 / 100000    4.68% 19727/s 00m04s 19239 / 100000   19.24% 43910/s 00m01s 40642 / 100000   40.64% 63687/s 63288 / 100000   63.29% 75461/s 86673 / 100000   86.67% 83441/s 100000 / 100000  100.00% 80712/s 100000 / 100000  100.00% 80712/s 1s
+Done!
+Statistics        Avg      Stdev        Max
+  Reqs/sec     88442.34   38924.76  131316.94
+  Latency       10.99ms    35.49ms      1.15s
+  Latency Distribution
+     50%     1.03ms
+     75%     2.05ms
+     90%     7.94ms
+     95%    41.76ms
+     99%   194.55ms
+  HTTP codes:
+    1xx - 0, 2xx - 92166, 3xx - 0, 4xx - 0, 5xx - 0
+    others - 7834
+  Errors:
+    dial tcp 127.0.0.1:6000: connectex: No connection could be made because the target machine actively refused it. - 7834
+  Throughput:    15.28MB/s
+
+
++-----------------+
+| Go-Wrk          |
++------------------------------------+
+| Duration    : 30                   |
++------------------------------------+
+Running 30s test @ http://127.0.0.1:6000/hello-world
+  1000 goroutine(s) running concurrently
+2192194 requests in 5.540044533s, 236.24MB read
+Requests/sec:		395699.71
+Transfer/sec:		42.64MB
+Overall Requests/sec:	72099.10
+Overall Transfer/sec:	7.77MB
+Fastest Request:	0s
+Avg Req Time:		2.526ms
+Slowest Request:	2.970239s
+Number of Errors:	83382
+Error Counts:		No connection could be made because the target machine actively refused it.=83131,net/http: timeout awaiting response headers=251
+10%:			0s
+50%:			0s
+75%:			0s
+99%:			0s
+99.9%:			0s
+99.9999%:		0s
+99.99999%:		0s
+stddev:			6.141ms
+
+
++-----------------+
+| Vegeta          |
++------------------------------------+
+| Requests    : 100000               |
+| Duration    : 30                   |
++------------------------------------+
+Requests      [total, rate, throughput]         1866385, 62210.86, 62204.08
+Duration      [total, attack, wait]             30.004s, 30.001s, 3.187ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  1.07ms, 4.658ms, 3.169ms, 10.609ms, 14.589ms, 24.153ms, 307.093ms
+Bytes In      [total, mean]                     24262940, 13.00
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           100.00%
+Status Codes  [code:count]                      0:5  200:1866380  
+Error Set:
+Get "http://127.0.0.1:6000/hello-world": dial tcp 0.0.0.0:0->127.0.0.1:6000: connectex: No connection could be made because the target machine actively refused it.
+
+

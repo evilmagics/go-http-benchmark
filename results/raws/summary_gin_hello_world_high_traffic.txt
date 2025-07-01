@@ -1,0 +1,83 @@
++------------+
+| Parameters |
++---------------------------------------------------------------------+
+| Target NAME    : gin                                                |
+| Target URL     : http://127.0.0.1:6001/hello-world                  |
+| HTTP Method    : GET                                                |
+| Connections    : 1000                                               |
+| Requests       : 100000                                             |
+| Duration       : 30                                                 |
+| Results Dir    : results                                            |
+| Timestamp      : 2025-06-30_21-13-21                                |
+| Profile        : Hello World (High Traffic)                         |
++---------------------------------------------------------------------+
+
++-----------------+
+| Bombardier      |
++------------------------------------+
+| Requests    : 100000               |
++------------------------------------+
+Bombarding http://127.0.0.1:6001/hello-world with 100000 request(s) using 1000 connection(s)
+ 0 / 100000    0.00% 4046 / 100000    4.05% 16968/s 00m05s 9415 / 100000    9.41% 21453/s 00m04s 14813 / 100000   14.81% 23168/s 00m03s 20290 / 100000   20.29% 24159/s 00m03s 25835 / 100000   25.84% 24839/s 00m02s 32239 / 100000   32.24% 25996/s 00m02s 38757 / 100000   38.76% 26905/s 00m02s 45282 / 100000   45.28% 27588/s 00m01s 51737 / 100000   51.74% 28093/s 00m01s 58180 / 100000   58.18% 28493/s 00m01s 64754 / 100000   64.75% 28873/s 00m01s 71086 / 100000   71.09% 29099/s 77578 / 100000   77.58% 29345/s 84014 / 100000   84.01% 29538/s 90457 / 100000   90.46% 29690/s 96747 / 100000   96.75% 29790/s 100000 / 100000  100.00% 29002/s 100000 / 100000  100.00% 29002/s 3s
+Done!
+Statistics        Avg      Stdev        Max
+  Reqs/sec     30587.48    3383.06   44863.12
+  Latency       32.80ms   111.21ms      3.26s
+  Latency Distribution
+     50%    35.47ms
+     75%    37.63ms
+     90%    50.31ms
+     95%    53.51ms
+     99%    56.62ms
+  HTTP codes:
+    1xx - 0, 2xx - 42586, 3xx - 0, 4xx - 0, 5xx - 0
+    others - 57414
+  Errors:
+    dial tcp 127.0.0.1:6001: connectex: No connection could be made because the target machine actively refused it. - 57414
+  Throughput:     2.47MB/s
+
+
++-----------------+
+| Go-Wrk          |
++------------------------------------+
+| Duration    : 30                   |
++------------------------------------+
+Running 30s test @ http://127.0.0.1:6001/hello-world
+  1000 goroutine(s) running concurrently
+364123 requests in 6.896487077s, 39.24MB read
+Requests/sec:		52798.33
+Transfer/sec:		5.69MB
+Overall Requests/sec:	12046.64
+Overall Transfer/sec:	1.30MB
+Fastest Request:	0s
+Avg Req Time:		18.939ms
+Slowest Request:	3.006335s
+Number of Errors:	459456
+Error Counts:		No connection could be made because the target machine actively refused it.=458732,net/http: timeout awaiting response headers=724
+10%:			0s
+50%:			0s
+75%:			0s
+99%:			0s
+99.9%:			0s
+99.9999%:		0s
+99.99999%:		0s
+stddev:			33.675ms
+
+
++-----------------+
+| Vegeta          |
++------------------------------------+
+| Requests    : 100000               |
+| Duration    : 30                   |
++------------------------------------+
+Requests      [total, rate, throughput]         467257, 15575.31, 15536.12
+Duration      [total, attack, wait]             30.028s, 30s, 28.185ms
+Latencies     [min, mean, 50, 90, 95, 99, max]  542.1µs, 32.066ms, 31.658ms, 64.226ms, 69.063ms, 109.205ms, 354.98ms
+Bytes In      [total, mean]                     6064747, 12.98
+Bytes Out     [total, mean]                     0, 0.00
+Success       [ratio]                           99.84%
+Status Codes  [code:count]                      0:738  200:466519  
+Error Set:
+Get "http://127.0.0.1:6001/hello-world": dial tcp 0.0.0.0:0->127.0.0.1:6001: connectex: No connection could be made because the target machine actively refused it.
+
+
