@@ -26,10 +26,12 @@ NC='\033[0m' # No Color
 
 APP_NAME="benchmark"
 CONNECTIONS=100
+MAX_CONNECTIONS=0
 REQUESTS=10000
 DURATION=10
 TIMEOUT=10
-WORKERS=4
+WORKERS=10
+MAX_WORKERS=100
 METHOD="GET"
 TARGET_URL=""
 TARGET_NAME="Local"
@@ -286,7 +288,7 @@ function run_vegeta() {
     echo -e "| Duration    : ${BLUE}$(right_pad $DURATION 20)${NC} |" 
     echo -e "+$(right_pad "" 36 "-")+" 
 
-    echo "$METHOD $TARGET_URL" | vegeta attack -connections "$CONNECTIONS" -duration "${DURATION}s" -workers "$WORKERS" -rate 0 -max-workers 500 -timeout "${TIMEOUT}s" | vegeta report
+    echo "$METHOD $TARGET_URL" | vegeta attack -connections "$CONNECTIONS" -max-connections "$MAX_CONNECTIONS" -duration "${DURATION}s" -workers "$WORKERS" -rate 0 -max-workers "$MAX_WORKERS" -timeout "${TIMEOUT}s" | vegeta report
 }
 
 function usage() {
@@ -296,11 +298,12 @@ function usage() {
     echo -e "" 
     echo -e "  Options:" 
     echo -e "  -c | --connections      Maximum connections (default: 100)" 
-    echo -e "  -r | --requests         Total requests (for bombardier/hey, default: 10000)" 
-    echo -e "  -d | --durations        Duration in seconds (for go-wrk/hey, default: 10)" 
+    echo -e "  -r | --requests         Total requests (for bombardier/vegeta, default: 10000)" 
+    echo -e "  -d | --durations        Duration in seconds (for go-wrk/vegeta, default: 10)" 
     echo -e "  -m | --method           HTTP method (default: GET)" 
-    echo -e "  -w | --workers          Number of workers (default: 4)"
-    echo -e "  -t | --timeout          Timeout in seconds (default: 10)"
+    echo -e "  -w | --workers          Number of workers (default: 10)"
+    echo -e "       --max-workers      Number of max workers (default: 100)"
+    echo -e "  -t | --timeout          Timeout in seconds (default: 10s)"
     echo -e "  -o | --output-file      Output file (default: {output-dir}/{timestamp})" 
     echo -e "       --output-dir       Output directory (default: ./results)"
     echo -e "  -p | --profile          Test profiles (default: "default")"
@@ -320,6 +323,7 @@ function parse_args() {
             -d| --duration) DURATION="$2"; shift ;;
             -m| --method) METHOD="$2"; shift ;;
             -w| --workers) WORKERS="$2"; shift ;;
+                --max-workers) MAX_WORKERS="$2"; shift ;;
             -t| --timeout) TIMEOUT="$2"; shift ;;
             -o| --output-file) OUTPUT_FILE="$2"; shift ;;
                 --output-dir) OUTPUT_DIR="$2"; shift ;;
